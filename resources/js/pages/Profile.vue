@@ -3,7 +3,10 @@
     <div class="container">
       <div class="row">
         <div class="col-lg-12 mb-2">
-          <ul class="nav nav-pills profile-pills nav-fill">
+          <ul
+            class="nav nav-pills profile-pills nav-fill"
+            style="direction: rtl"
+          >
             <li class="nav-item">
               <a
                 v-bind:class="[
@@ -16,10 +19,9 @@
                 @click="changeTab('profile')"
                 aria-controls="profile"
                 aria-selected="true"
-                ><i class="icofont-ui-user"></i>
-                <span class="d-none d-sm-inline">{{
-                  $lang["Profile Overview"]
-                }}</span></a
+              >
+                <i class="icofont-ui-user"></i>
+                <span class="d-none d-sm-inline">الملف الشخصى</span></a
               >
             </li>
             <li v-if="user.user_type == 'customer'" class="nav-item">
@@ -34,10 +36,9 @@
                 @click="changeTab('orders')"
                 aria-controls="orders"
                 aria-selected="false"
-                ><i class="icofont-listine-dots"></i>
-                <span class="d-none d-sm-inline">{{
-                  $lang["My Orders"]
-                }}</span></a
+              >
+                <i class="icofont-listine-dots"></i>
+                <span class="d-none d-sm-inline">طلباتى</span></a
               >
             </li>
             <li v-if="user.user_type == 'delivery_boy'" class="nav-item">
@@ -88,10 +89,9 @@
                 @click="changeTab('update_profile')"
                 aria-controls="update_profile"
                 aria-selected="true"
-                ><i class="icofont-user-alt-3"></i>
-                <span class="d-none d-sm-inline">{{
-                  $lang["Update Profile"]
-                }}</span></a
+              >
+                <i class="icofont-user-alt-3"></i>
+                <span class="d-none d-sm-inline">تعديل الملف الشخصى</span></a
               >
             </li>
             <li class="nav-item">
@@ -106,16 +106,11 @@
                 @click="changeTab('update_profile_picture')"
                 aria-controls="update_profile_picture"
                 aria-selected="true"
-                ><i class="icofont-image"></i>
-                <span class="d-none d-sm-inline">{{
-                  $lang["Update Profile Picture"]
-                }}</span></a
               >
-            </li>
-            <li class="nav-item">
-              <a href="#" @click="logout" class="nav-link"
-                ><i class="icofont-exit"></i>
-                <span class="d-none d-sm-inline">{{ $lang["Logout"] }}</span></a
+                <i class="icofont-image"></i>
+                <span class="d-none d-sm-inline"
+                  >تعديل صورة الملف الشخصى</span
+                ></a
               >
             </li>
           </ul>
@@ -129,27 +124,27 @@
               ]"
               id="profile"
             >
-              <div class="card">
-                <div class="card-header">
-                  <h4 class="header-title">{{ $lang["Profile Overview"] }}</h4>
+              <div class="card" style="direction: rtl">
+                <div class="card-header" style="text-align: center">
+                  <h4 class="header-title">الملف الشخصى</h4>
                 </div>
-                <div class="card-body">
+                <div class="card-body" style="text-align: right">
                   <table v-if="user.id" class="table table-bordered">
                     <tbody>
                       <tr>
-                        <td>{{ $lang["Name"] }}</td>
+                        <td>الأسم</td>
                         <td>{{ user.name }}</td>
                       </tr>
                       <tr>
-                        <td>{{ $lang["Email"] }}</td>
+                        <td>البريد الألكترونى</td>
                         <td>{{ user.email }}</td>
                       </tr>
                       <tr>
-                        <td>{{ $lang["Mobile"] }}</td>
+                        <td>رقم الهاتف</td>
                         <td>{{ user.phone }}</td>
                       </tr>
                       <tr>
-                        <td>{{ $lang["Shipping Address"] }}</td>
+                        <td>عنوان التوصيل</td>
                         <td>{{ user.address }}</td>
                       </tr>
                     </tbody>
@@ -204,14 +199,14 @@
               ]"
               id="update_profile"
             >
-              <div class="card">
+              <div class="card" style="direction: rtl; text-align: right">
                 <div class="card-header">
-                  <h4 class="header-title">{{ $lang["Update Profile"] }}</h4>
+                  <h4 class="header-title text-center">تعديل الملف الشخصى</h4>
                 </div>
                 <div class="card-body">
                   <form class="form-signup" @submit.prevent="updateMyProfile">
                     <div class="form-label-group mb-3">
-                      <label for="name">{{ $lang["Name"] }} *</label>
+                      <label for="name">الأسم *</label>
                       <input
                         type="text"
                         id="name"
@@ -221,7 +216,7 @@
                             : 'form-control'
                         "
                         v-model="user.name"
-                        :placeholder="$lang['Name']"
+                        placeholder="الأسم"
                       />
                       <span class="text-danger" v-if="errors && errors.name">
                         {{ errors.name[0] }}
@@ -229,7 +224,7 @@
                     </div>
 
                     <div class="form-label-group mb-3">
-                      <label for="email">{{ $lang["Email address"] }} *</label>
+                      <label for="email">البريد الألكترونى *</label>
                       <input
                         type="email"
                         id="email"
@@ -239,7 +234,7 @@
                             : 'form-control'
                         "
                         v-model="user.email"
-                        :placeholder="$lang['Email address']"
+                        placeholder="البريد الألكترونى"
                       />
                       <span class="text-danger" v-if="errors && errors.email">
                         {{ errors.email[0] }}
@@ -247,7 +242,7 @@
                     </div>
 
                     <div class="form-label-group mb-3">
-                      <label for="phone">{{ $lang["Mobile Number"] }} *</label>
+                      <label for="phone">رقم الهاتف *</label>
                       <input
                         type="text"
                         id="phone"
@@ -257,7 +252,7 @@
                             : 'form-control'
                         "
                         v-model="user.phone"
-                        :placeholder="$lang['Mobile Number']"
+                        placeholder="رقم الهاتف"
                       />
                       <span class="text-danger" v-if="errors && errors.phone">
                         {{ errors.phone[0] }}
@@ -265,9 +260,7 @@
                     </div>
 
                     <div class="form-label-group mb-3">
-                      <label for="phone"
-                        >{{ $lang["Shipping Address"] }} *</label
-                      >
+                      <label for="phone">عنوان التسليم *</label>
                       <textarea
                         id="address"
                         v-bind:class="
@@ -276,7 +269,7 @@
                             : 'form-control'
                         "
                         v-model="user.address"
-                        :placeholder="$lang['Shipping Address']"
+                        placeholder="عنوان التسليم "
                       ></textarea>
                       <span class="text-danger" v-if="errors && errors.address">
                         {{ errors.address[0] }}
@@ -284,7 +277,7 @@
                     </div>
 
                     <div class="form-label-group mb-3">
-                      <label for="password">{{ $lang["Password"] }}</label>
+                      <label for="password">كلمة المرور</label>
                       <input
                         type="password"
                         id="password"
@@ -294,7 +287,7 @@
                             : 'form-control'
                         "
                         v-model="user.password"
-                        :placeholder="$lang['Password']"
+                        placeholder="كلمة المرور"
                       />
                       <span
                         class="text-danger"
@@ -305,32 +298,34 @@
                     </div>
 
                     <div class="form-label-group mb-3">
-                      <label for="password">{{
-                        $lang["Confirm Password"]
-                      }}</label>
+                      <label for="password">تأكيد كلمة المرور</label>
                       <input
                         type="password"
                         id="password_confirmation"
                         class="form-control"
                         v-model="user.password_confirmation"
-                        :placeholder="$lang['Confirm Password']"
+                        placeholder="تأكيد كلمة المرور"
                       />
                     </div>
 
-                    <button
-                      type="submit"
-                      class="btn btn-lg btn-primary text-uppercase"
-                    >
-                      <span
-                        v-if="loading"
-                        class="spinner-border spinner-border-sm"
-                      ></span>
-                      <span v-if="!loading">{{ $lang["Update Profile"] }}</span>
-                    </button>
+                    <div class="d-flex justify-content-center">
+                      <button
+                        type="submit"
+                        class="btn btn-lg text-uppercase"
+                        style="background-color: var(--primary-color)"
+                      >
+                        <span
+                          v-if="loading"
+                          class="spinner-border spinner-border-sm"
+                        ></span>
+                        <span v-if="!loading"> حفظ</span>
+                      </button>
+                    </div>
                   </form>
                 </div>
               </div>
             </div>
+
             <div
               v-bind:class="[
                 activeTab == 'update_profile_picture' ? 'show active' : '',
@@ -339,17 +334,12 @@
               id="update_profile_picture"
             >
               <div class="card">
-                <div class="card-header d-flex align-items-center">
-                  <h4 class="header-title">
-                    {{ $lang["Update Profile Picture"] }}
+                <div
+                  class="card-header d-flex align-items-center justify-content-center"
+                >
+                  <h4 class="header-title text-center">
+                    تعديل صورة الملف الشخصى
                   </h4>
-                  <button
-                    type="button"
-                    @click="selectFileInput"
-                    class="btn btn-light text-dark ml-auto"
-                  >
-                    <i class="icofont-image"></i> {{ $lang["Select Image"] }}
-                  </button>
                 </div>
                 <div class="card-body text-center">
                   <img
@@ -371,20 +361,41 @@
                   />
                   <br />
 
-                  <button
-                    type="button"
-                    @click="updateMyProfilePicture"
-                    class="btn btn-primary mt-3"
+                  <div
+                    style="
+                      display: flex;
+                      align-content: center;
+                      flex-direction: column;
+                      flex-wrap: wrap;
+                      margin-top: 20px;
+                    "
                   >
-                    <span
-                      v-if="loading"
-                      class="spinner-border spinner-border-sm"
-                    ></span>
-                    <span v-if="!loading">
-                      <i class="icofont-cloud-upload"></i>
-                      {{ $lang["Update Profile Picture"] }}</span
-                    >
-                  </button>
+                    <div class="col-md-12">
+                      <button
+                        type="button"
+                        @click="selectFileInput"
+                        class="btn text-dark w-75"
+                        style="border: 1px solid black"
+                      >
+                        أختر الصورة
+                      </button>
+                    </div>
+
+                    <div class="col-md-12">
+                      <button
+                        type="button"
+                        @click="updateMyProfilePicture"
+                        class="btn mt-3 w-75"
+                        style="background-color: var(--primary-color)"
+                      >
+                        <span
+                          v-if="loading"
+                          class="spinner-border spinner-border-sm"
+                        ></span>
+                        <span v-if="!loading"> حفظ </span>
+                      </button>
+                    </div>
+                  </div>
                 </div>
               </div>
             </div>

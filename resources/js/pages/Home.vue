@@ -17,7 +17,10 @@
 
     <section class="category section">
       <div class="container">
-        <h3 class="section-heading">{{ $lang["Product Categories"] }}</h3>
+        <h3 class="section-heading">
+          <!-- {{ $lang["Product Categories"] }} -->
+          فئات المنتجات
+        </h3>
 
         <div class="row">
           <template v-for="category in allCategories">

@@ -1,73 +1,84 @@
 <template>
   <div class="card">
     <div class="card-header">
-      <h4 class="text-center">{{ $lang["Order Preview"] }}</h4>
+      <h4 class="text-center">
+        معاينة الطلب
+      </h4>
     </div>
-    <div class="card-body">
+    <div class="card-body" style="direction:rtl">
       <form @submit.prevent="makeOrder" autocomplete="off">
-        <table class="table">
+        <table class="table" style="text-align: right; ">
           <tbody>
             <tr>
               <td colspan="2" class="text-center">
-                <b>{{ $lang["Delivery Details"] }}</b>
+                <b>
+                  تفاصيل التسليم
+                </b>
               </td>
             </tr>
             <tr>
-              <td>{{ $lang["Delivery Address"] }}</td>
-              <td>{{ deliveryDetails.deliveryAddress.address }}</td>
-            </tr>
-            <tr>
-              <td>{{ $lang["Delivery Type"] }}</td>
               <td>
-                {{ deliveryDetails.deliveryTiming.delivery_type.toUpperCase() }}
+                عنوان التسليم
               </td>
-            </tr>
-            <tr
-              v-if="deliveryDetails.deliveryTiming.delivery_type == 'preorder'"
-            >
-              <td>{{ $lang["Delivery Time"] }}</td>
-              <td>{{ deliveryDate }}</td>
+              <td>{{ deliveryDetails ? deliveryDetails.deliveryAddress.address : '' }}</td>
             </tr>
             <tr>
-              <td>{{ $lang["Payment Method"] }}</td>
               <td>
-                {{
-                  deliveryDetails.paymentMethod
-                    .replaceAll("_", " ")
-                    .toUpperCase()
-                }}
+                نوع التوصيل
+              </td>
+              <td>
+                Express
               </td>
             </tr>
-            <tr v-if="deliveryDetails.deliveryTiming.order_instructions">
-              <td>{{ $lang["Order Note"] }}</td>
-              <td>{{ deliveryDetails.deliveryTiming.order_instructions }}</td>
+            
+            <tr>
+              <td>
+                طريقة الدفع او السداد
+              </td>
+              <td>
+                Cash On Delivery
+              </td>
             </tr>
+        
           </tbody>
         </table>
 
-        <table class="table">
+        <table class="table" style="text-align: right; ">
           <tbody>
             <tr>
               <td colspan="2" class="text-center">
-                <b>{{ $lang["Order Summary"] }}</b>
+                <b>
+                  ملخص الطلب
+                </b>
               </td>
             </tr>
             <tr>
-              <td>{{ $lang["Sub Total"] }}</td>
+              <td>
+                المجموع الفرعي
+              </td>
               <td class="text-right">{{ $currency + " " + subTotal }}</td>
             </tr>
             <tr>
-              <td>{{ $lang["Delivery Charge"] }}</td>
+              <td>
+                <!-- {{ $lang["Delivery Charge"] }} -->
+                رسوم التوصيل
+              </td>
               <td class="text-right">
                 + {{ $currency + " " + deliveryCharge }}
               </td>
             </tr>
             <tr>
-              <td>{{ $lang["Discount"] }}</td>
+              <td>
+                <!-- {{ $lang["Discount"] }} -->
+                الخصم
+              </td>
               <td class="text-right">- {{ $currency + " " + discount }}</td>
             </tr>
             <tr>
-              <td>{{ $lang["Grand Total"] }}</td>
+              <td>
+                <!-- {{ $lang["Grand Total"] }} -->
+                المجموع الإجمالي
+              </td>
               <td class="text-right">
                 <b>{{ $currency + " " + grandTotal }}</b>
               </td>
@@ -75,9 +86,11 @@
           </tbody>
         </table>
 
-        <button type="submit" class="btn btn-primary btn-block mt-2">
+        <button type="submit" class="btn btn-block mt-2" style="background-color:var(--primary-color)">
           <span v-if="loading" class="spinner-border spinner-border-sm"></span>
-          <span v-if="!loading">{{ $lang["Place Order"] }}</span>
+          <span v-if="!loading">
+            اطلب الأن
+          </span>
         </button>
 
         <button
@@ -85,7 +98,7 @@
           @click="previousStep"
           class="btn btn-light text-dark btn-block"
         >
-          {{ $lang["Back"] }}
+          رجوع
         </button>
       </form>
     </div>
@@ -104,11 +117,11 @@ export default {
     deliveryDetails: function () {
       return this.$store.getters["checkout/delivery_details"];
     },
-    deliveryDate: function () {
-      return moment(this.deliveryDetails.deliveryTiming.delivery_date).format(
-        "MMM DD, YYYY hh:mm a"
-      );
-    },
+    // deliveryDate: function () {
+    //   return moment(this.deliveryDetails.deliveryTiming.delivery_date).format(
+    //     "MMM DD, YYYY hh:mm a"
+    //   );
+    // },
     cartItems: function () {
       return this.$store.getters["cart/cartItems"];
     },
@@ -153,8 +166,18 @@ export default {
           { id: item.id, qnty: item.qnty },
         ]),
         couponCode: this.couponData ? this.couponData.code : null,
-        deliveryDetails: this.deliveryDetails,
+        deliveryDetails: {
+      ...this.deliveryDetails,
+      deliveryTiming: {
+        order_instructions: "", 
+        delivery_type: "express",
+        delivery_date: moment(new Date().toISOString()).format("MMM DD, YYYY hh:mm a"),
+      },
+      paymentMethod: "cash_on_delivery",
+    },
       };
+
+
       this.placeOrder(data).then((response) => {
         this.resetStep();
         this.$store.dispatch("cart/emptyCart");
@@ -162,9 +185,9 @@ export default {
           name: "view_order",
           params: { id: response.data.data.order_id },
         });
-        if (this.deliveryDetails.paymentMethod == "cash_on_delivery") {
-          this.$awn.success(this.$lang["Your Order placed successfully"]);
-        }
+        // if (this.deliveryDetails.paymentMethod == "cash_on_delivery") {
+        //   this.$awn.success(this.$lang["Your Order placed successfully"]);
+        // }
       });
     },
   },

@@ -12,6 +12,12 @@ class ProductResource extends JsonResource {
      * @return array
      */
     public function toArray($request) {
+        $unitName = null;
+
+        if ($this->unit_number !== null && $this->unit->translation->short_name !== null) {
+            $unitName = $this->unit_number . ' ' . $this->unit->translation->short_name;
+        }
+    
         return [
             'id'            => $this->id,
             'cat_id'        => $this->category_id,
@@ -25,7 +31,7 @@ class ProductResource extends JsonResource {
             'current_price' => $this->special_price > 0  ? $this->special_price : $this->price,
             '_price'        => $this->special_price > 0 ? '<del>'.decimalPlace($this->price, currency()) .'</del>  '.decimalPlace($this->special_price, currency()) : decimalPlace($this->price, currency()),
             'in_stock'      => $this->in_stock,
-            'unit'          => $this->unit_number . ' ' . $this->unit->translation->short_name,
+            'unit'          => $unitName,
         ];
     }
 }

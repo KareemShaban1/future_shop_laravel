@@ -2,7 +2,6 @@
 
 namespace Laravel\Socialite\Two;
 
-use GuzzleHttp\RequestOptions;
 use Illuminate\Support\Arr;
 
 class FacebookProvider extends AbstractProvider implements ProviderInterface
@@ -50,13 +49,6 @@ class FacebookProvider extends AbstractProvider implements ProviderInterface
     protected $reRequest = false;
 
     /**
-     * The access token that was last used to retrieve a user.
-     *
-     * @var string|null
-     */
-    protected $lastToken;
-
-    /**
      * {@inheritdoc}
      */
     protected function getAuthUrl($state)
@@ -78,7 +70,7 @@ class FacebookProvider extends AbstractProvider implements ProviderInterface
     public function getAccessTokenResponse($code)
     {
         $response = $this->getHttpClient()->post($this->getTokenUrl(), [
-            RequestOptions::FORM_PARAMS => $this->getTokenFields($code),
+            'form_params' => $this->getTokenFields($code),
         ]);
 
         $data = json_decode($response->getBody(), true);
@@ -91,22 +83,18 @@ class FacebookProvider extends AbstractProvider implements ProviderInterface
      */
     protected function getUserByToken($token)
     {
-        $this->lastToken = $token;
-
-        $params = [
-            'access_token' => $token,
-            'fields' => implode(',', $this->fields),
-        ];
+        $meUrl = $this->graphUrl.'/'.$this->version.'/me?access_token='.$token.'&fields='.implode(',', $this->fields);
 
         if (! empty($this->clientSecret)) {
-            $params['appsecret_proof'] = hash_hmac('sha256', $token, $this->clientSecret);
+            $appSecretProof = hash_hmac('sha256', $token, $this->clientSecret);
+
+            $meUrl .= '&appsecret_proof='.$appSecretProof;
         }
 
-        $response = $this->getHttpClient()->get($this->graphUrl.'/'.$this->version.'/me', [
-            RequestOptions::HEADERS => [
+        $response = $this->getHttpClient()->get($meUrl, [
+            'headers' => [
                 'Accept' => 'application/json',
             ],
-            RequestOptions::QUERY => $params,
         ]);
 
         return json_decode($response->getBody(), true);
@@ -183,16 +171,6 @@ class FacebookProvider extends AbstractProvider implements ProviderInterface
         $this->reRequest = true;
 
         return $this;
-    }
-
-    /**
-     * Get the last access token used.
-     *
-     * @return string|null
-     */
-    public function lastToken()
-    {
-        return $this->lastToken;
     }
 
     /**

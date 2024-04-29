@@ -6,14 +6,20 @@
           <div class="row">
             <div class="col-lg-6">
               <div class="footer-item">
-                <h4>{{ $lang["About Us"] }}</h4>
+                <h4>
+                  <!-- {{ $lang["About Us"] }} -->
+                  عن الموقع
+                </h4>
                 <p>{{ settings.about_us }}</p>
               </div>
             </div>
 
             <div class="col-lg-3">
               <div class="footer-item">
-                <h4>{{ $lang["Important Links"] }}</h4>
+                <h4>
+                  <!-- {{ $lang["Important Links"] }} -->
+                  روابط مهمة
+                </h4>
                 <ul>
                   <li v-for="p in pages" :key="p.id">
                     <router-link
@@ -28,7 +34,10 @@
 
             <div class="col-lg-3">
               <div class="footer-item">
-                <h4>{{ $lang["Popular Category"] }}</h4>
+                <h4>
+                  <!-- {{ $lang["Popular Category"] }} -->
+                  الفئات المشهورة
+                </h4>
                 <ul>
                   <li v-for="pc in popularCategory" :key="pc.id">
                     <router-link
@@ -75,3 +84,10 @@ export default {
   },
 };
 </script>
+
+<style scoped>
+#footer {
+  direction:rtl;
+  text-align:right
+}
+</style>

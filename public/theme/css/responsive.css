@@ -57,10 +57,10 @@
     margin-bottom: 60px;
   }
   #content {
-    margin-left: 0px;
+    margin-right: 0px;
   }
   #content-area.mobile-nav #sidebar {
-    margin-left: -250px;
+    margin-right: -250px;
   }
   #home-search > button {
     padding: 8px 14px;
@@ -86,6 +86,7 @@
     width: 100%;
   }
   .shopping_cart_inner {
+    background:white;
     height: 100%;
     padding: 0px 20px;
   }

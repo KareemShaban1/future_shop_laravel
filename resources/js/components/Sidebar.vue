@@ -8,17 +8,20 @@
         :to="{ name: 'home' }"
         exact
       >
-        <i class="icofont-home"></i> {{ $lang["Home"] }}
+        <i class="icofont-home"></i> 
+        الصفحة الرئيسية
+        <!-- {{ $lang["Home"] }} -->
       </router-link>
 
-      <router-link
+      <!-- <router-link
         class="nav-link"
         v-on:click.native="triggerNav"
         :to="{ name: 'offersProducts' }"
         exact
       >
-        <i class="icofont-gift"></i> {{ $lang["Special Offers"] }}
-      </router-link>
+        <i class="icofont-gift"></i> 
+        العروض الخاصة
+      </router-link> -->
 
       <span v-for="category in allCategories" :key="category.id">
         <span
@@ -104,14 +107,11 @@ export default {
 <style scoped>
 /* Add styles for the sidebar */
 .sidebar-right {
-  position: fixed;
+  direction:rtl;
   top: 70px;
   right: 0;
   bottom: 0;
-  width: 250px; /* Adjust the width as needed */
-  background-color: #fff; /* Sidebar background color */
-  box-shadow: -2px 0 5px rgba(0, 0, 0, 0.1); /* Sidebar shadow */
-  overflow-y: auto; /* Allow vertical scrolling */
-  z-index: 1000; /* Ensure the sidebar is above other content */
+  text-align:center
+
 }
 </style>

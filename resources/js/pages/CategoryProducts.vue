@@ -69,19 +69,19 @@ export default {
   methods: {
     ...mapActions("category", ["getCategory", "getProducts"]),
     infiniteHandler() {
-      window.onscroll = () => {
-        let _this = this;
-        let bottomOfWindow =
-          document.documentElement.scrollTop + window.innerHeight >
-          document.documentElement.offsetHeight -
-            document.getElementById("footer").offsetHeight;
-        if (bottomOfWindow && this.load_more && this.page != null) {
-          this.load_more = false;
-          this.getProducts({ slug: null }).then(function () {
-            _this.load_more = true;
-          });
-        }
-      };
+      // window.onscroll = () => {.
+      //   let _this = this;
+      //   let bottomOfWindow =
+      //     document.documentElement.scrollTop + window.innerHeight >
+      //     document.documentElement.offsetHeight -
+      //       document.getElementById("footer").offsetHeight;
+      //   if (bottomOfWindow && this.load_more && this.page != null) {
+      //     this.load_more = false;
+      //     this.getProducts({ slug: null }).then(function () {
+      //       _this.load_more = true;
+      //     });
+      //   }
+      // };
     },
   },
   created() {

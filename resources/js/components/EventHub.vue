@@ -2,7 +2,6 @@
   <div></div>
 </template>
 
-
 <script>
 export default {
   name: "event-hub",
@@ -29,4 +28,3 @@ export default {
   },
 };
 </script>
-

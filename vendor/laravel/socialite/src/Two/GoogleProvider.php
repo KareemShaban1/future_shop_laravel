@@ -2,8 +2,6 @@
 
 namespace Laravel\Socialite\Two;
 
-use GuzzleHttp\Psr7\Stream;
-use GuzzleHttp\RequestOptions;
 use Illuminate\Support\Arr;
 
 class GoogleProvider extends AbstractProvider implements ProviderInterface
@@ -43,40 +41,34 @@ class GoogleProvider extends AbstractProvider implements ProviderInterface
     }
 
     /**
-     * {@inheritdoc}
+     * Get the POST fields for the token request.
+     *
+     * @param  string  $code
+     * @return array
      */
-    protected function getUserByToken($token)
+    protected function getTokenFields($code)
     {
-        $response = $this->getHttpClient()->get('https://www.googleapis.com/oauth2/v3/userinfo', [
-            RequestOptions::QUERY => [
-                'prettyPrint' => 'false',
-            ],
-            RequestOptions::HEADERS => [
-                'Accept' => 'application/json',
-                'Authorization' => 'Bearer '.$token,
-            ],
-        ]);
-
-        if ($response->getBody() instanceof Stream) {
-            return json_decode($response->getBody()->getContents(), true);
-        }
-
-        return json_decode($response->getBody(), true);
+        return Arr::add(
+            parent::getTokenFields($code), 'grant_type', 'authorization_code'
+        );
     }
 
     /**
      * {@inheritdoc}
      */
-    public function refreshToken($refreshToken)
+    protected function getUserByToken($token)
     {
-        $response = $this->getRefreshTokenResponse($refreshToken);
+        $response = $this->getHttpClient()->get('https://www.googleapis.com/oauth2/v3/userinfo', [
+            'query' => [
+                'prettyPrint' => 'false',
+            ],
+            'headers' => [
+                'Accept' => 'application/json',
+                'Authorization' => 'Bearer '.$token,
+            ],
+        ]);
 
-        return new Token(
-            Arr::get($response, 'access_token'),
-            Arr::get($response, 'refresh_token', $refreshToken),
-            Arr::get($response, 'expires_in'),
-            explode($this->scopeSeparator, Arr::get($response, 'scope', ''))
-        );
+        return json_decode($response->getBody(), true);
     }
 
     /**

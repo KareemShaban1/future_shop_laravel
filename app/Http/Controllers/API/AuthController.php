@@ -12,267 +12,402 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Validation\Rule;
 use Socialite;
 
-class AuthController extends Controller {
+class AuthController extends Controller
+{
+    /**
+     * Create a new AuthController instance.
+     *
+     * @return void
+     */
+    public function __construct()
+    {
+        $this->middleware('auth:api', ['except' => ['login', 'register', 'social_login', 'register_guest_user']]);
+    }
 
-	/**
-	 * Create a new AuthController instance.
-	 *
-	 * @return void
-	 */
-	public function __construct() {
-		$this->middleware('auth:api', ['except' => ['login', 'register', 'social_login', 'register_guest_user']]);
-	}
+    /**
+     * Get a JWT token via given credentials.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     *
+     * @return \Illuminate\Http\JsonResponse
+     */
+    //// old
+    // public function login(Request $request)
+    // {
+    //     $credentials = [
+    //         'email' => $request->email,
+    //         'password' => $request->password,
+    //         'user_type' => ['customer', 'delivery_boy'],
+    //     ];
 
-	/**
-	 * Get a JWT token via given credentials.
-	 *
-	 * @param  \Illuminate\Http\Request  $request
-	 *
-	 * @return \Illuminate\Http\JsonResponse
-	 */
-	public function login(Request $request) {
-		$credentials = [
-			'email' => $request->email,
-			'password' => $request->password,
-			'user_type' => ['customer', 'delivery_boy'],
-		];
+    //     if ($token = $this->guard()->attempt($credentials)) {
+    //         return $this->respondWithToken($token);
+    //     }
 
-		if ($token = $this->guard()->attempt($credentials)) {
-			return $this->respondWithToken($token);
-		}
+    //     return response()->json(['result' => false, 'message' => _lang('Username or Password is incorrect')], 401);
+    // }
 
-		return response()->json(['result' => false, 'message' => _lang('Username or Password is incorrect')], 401);
-	}
+    public function login(Request $request)
+    {
+        // return $request->all();
+        $credentials = [
+            'phone' => $request->phone,
+            'password' => $request->password,
+            'user_type' => ['customer', 'delivery_boy'],
+        ];
 
-	/**
-	 * Register New User.
-	 *
-	 * @return \Illuminate\Http\JsonResponse
-	 */
-	public function register(Request $request) {
-		$request->validate([
-			'name' => 'required|string|max:191',
-			'email' => 'required|string|email|max:191|unique:users',
-			'password' => 'required|string|min:6|confirmed',
-			'phone' => 'required',
-		], [
-			'name.required' => _lang('The name field is required.'),
-			'email.required' => _lang('The email field is required.'),
-			'email.unique' => _lang('Email address already exists.'),
-			'password.required' => _lang('The password field is required.'),
-			'password.min' => _lang('The password must be at least 6 characters.'),
-			'password.confirmed' => _lang('The password confirmation does not match.'),
-			'phone.required' => _lang('The phone field is required.'),
-		]);
+        if ($token = $this->guard()->attempt($credentials)) {
+            return $this->respondWithToken($token);
+        }
 
-		$user = new User();
-		$user->name = $request->name;
-		$user->email = $request->email;
-		$user->phone = $request->phone;
-		$user->email_verified_at = get_option('email_verification') != 'enabled' ? now() : NULL;
-		$user->user_type = 'customer';
-		$user->password = Hash::make($request->password);
-		$user->status = 1;
-		$user->save();
+        return response()->json(['result' => false, 'message' => _lang('Username or Password is incorrect')], 401);
+    }
 
-		$credentials = $request->only('email', 'password');
-		$token = $this->guard()->attempt($credentials);
 
-		if (get_option('email_verification') == 'enabled') {
-			//Send Email Verification Message
-			Overrider::load("Settings");
-			$this->guard()->user()->sendEmailVerificationNotification();
-		} else {
-			//Trigger Verified Event
-			event(new \Illuminate\Auth\Events\Verified($user));
-		}
+    public function customLogin(Request $request)
+    {
+        $credentials = [
+            'email' => $request->email,
+            'password' => $request->password,
+            'user_type' => ['customer', 'delivery_boy'],
+        ];
 
-		return $this->respondWithToken($token);
+        if ($token = $this->guard()->attempt($credentials)) {
+            return $this->respondWithToken($token);
+        }
 
-	}
+        return response()->json(['result' => false, 'message' => _lang('Username or Password is incorrect')], 401);
+    }
 
-	/**
-	 * Get the authenticated User
-	 *
-	 * @return \Illuminate\Http\JsonResponse
-	 */
-	public function profile() {
-		return new UserResource($this->guard()->user());
-	}
+    /**
+     * Register New User.
+     *
+     * @return \Illuminate\Http\JsonResponse
+     */
+    public function register(Request $request)
+    {
+        $request->validate([
+            'name' => 'required|string|max:191',
+            'email' => 'required|string|email|max:191|unique:users',
+            'password' => 'required|string|min:6|confirmed',
+            'phone' => 'required',
+        ], [
+            'name.required' => _lang('The name field is required.'),
+            'email.required' => _lang('The email field is required.'),
+            'email.unique' => _lang('Email address already exists.'),
+            'password.required' => _lang('The password field is required.'),
+            'password.min' => _lang('The password must be at least 6 characters.'),
+            'password.confirmed' => _lang('The password confirmation does not match.'),
+            'phone.required' => _lang('The phone field is required.'),
+        ]);
 
-	/**
-	 * Update user information
-	 *
-	 * @return \Illuminate\Http\JsonResponse
-	 */
-	public function update_profile(Request $request) {
-		$user = $this->guard()->user();
+        $user = new User();
+        $user->name = $request->name;
+        $user->email = $request->email;
+        $user->phone = $request->phone;
+        $user->email_verified_at = get_option('email_verification') != 'enabled' ? now() : null;
+        $user->user_type = 'customer';
+        $user->password = Hash::make($request->password);
+        $user->status = 1;
+        $user->save();
 
-		$request->validate([
-			'name' => 'required|string|max:191',
-			'email' => [
-				'required',
-				'email',
-				Rule::unique('users')->ignore($user->id),
-			],
-			'password' => 'nullable|string|min:6|confirmed',
-			'phone' => 'required',
-			'address' => 'required',
-		]);
+        $credentials = $request->only('email', 'password');
+        $token = $this->guard()->attempt($credentials);
 
-		$user->name = $request->name;
-		$user->email = $request->email;
-		$user->phone = $request->phone;
-		$user->address = $request->address;
-		if ($request->password) {
-			$user->password = Hash::make($request->password);
-		}
-		$user->save();
+        if (get_option('email_verification') == 'enabled') {
+            //Send Email Verification Message
+            Overrider::load("Settings");
+            $this->guard()->user()->sendEmailVerificationNotification();
+        } else {
+            //Trigger Verified Event
+            event(new \Illuminate\Auth\Events\Verified($user));
+        }
 
-		return new UserResource($user);
-	}
+        return $this->respondWithToken($token);
 
-	/**
-	 * Update profile picture.
-	 *
-	 * @return \Illuminate\Http\JsonResponse
-	 */
-	public function update_profile_picture(Request $request) {
-		$request->validate([
-			'profile_picture' => 'nullable|image|max:2048',
-		]);
+    }
 
-		if ($request->hasFile('profile_picture')) {
-			$image = $request->file('profile_picture');
-			$file_name = "profile_" . time() . '.' . $image->getClientOriginalExtension();
-			$image->move(base_path('public/uploads/profile/'), $file_name);
-			$user = $this->guard()->user();
-			$user->profile_picture = $file_name;
-			$user->save();
+    /**
+     * Get the authenticated User
+     *
+     * @return \Illuminate\Http\JsonResponse
+     */
+    public function profile()
+    {
+        return new UserResource($this->guard()->user());
+    }
 
-			return new UserResource($user);
-		}
+    /**
+     * Update user information
+     *
+     * @return \Illuminate\Http\JsonResponse
+     */
+    public function update_profile(Request $request)
+    {
+        $user = $this->guard()->user();
 
-	}
+        $request->validate([
+            'name' => 'required|string|max:191',
+            'email' => [
+                'required',
+                'email',
+                Rule::unique('users')->ignore($user->id),
+            ],
+            'password' => 'nullable|string|min:6|confirmed',
+            'phone' => 'required',
+            'address' => 'required',
+        ]);
 
-	/**
-	 * Log the user out (Invalidate the token)
-	 *
-	 * @return \Illuminate\Http\JsonResponse
-	 */
-	public function logout() {
-		$this->guard()->logout();
+        $user->name = $request->name;
+        $user->email = $request->email;
+        $user->phone = $request->phone;
+        $user->address = $request->address;
+        if ($request->password) {
+            $user->password = Hash::make($request->password);
+        }
+        $user->save();
 
-		return response()->json(['message' => 'Successfully logged out']);
-	}
+        return new UserResource($user);
+    }
 
-	/**
-	 * Refresh a token.
-	 *
-	 * @return \Illuminate\Http\JsonResponse
-	 */
-	public function refresh() {
-		return $this->respondWithToken($this->guard()->refresh());
-	}
+    /**
+     * Update profile picture.
+     *
+     * @return \Illuminate\Http\JsonResponse
+     */
+    public function update_profile_picture(Request $request)
+    {
+        $request->validate([
+            'profile_picture' => 'nullable|image|max:2048',
+        ]);
 
-	public function request_verification_link() {
-		//Send Email Verification Message
-		Overrider::load("Settings");
-		$this->guard()->user()->sendEmailVerificationNotification();
-	}
+        if ($request->hasFile('profile_picture')) {
+            $image = $request->file('profile_picture');
+            $file_name = "profile_" . time() . '.' . $image->getClientOriginalExtension();
+            $image->move(base_path('public/uploads/profile/'), $file_name);
+            $user = $this->guard()->user();
+            $user->profile_picture = $file_name;
+            $user->save();
 
-	/**
-	 * Social Login
-	 *
-	 * @return \Illuminate\Http\JsonResponse
-	 */
-	public function social_login($provider) {
-		Overrider::load("SocialSettings");
-		$userSocial = Socialite::driver($provider)->redirectUrl(url(''))->stateless()->user();
-		$user = User::where(['email' => $userSocial->getEmail()])->first();
+            return new UserResource($user);
+        }
 
-		if ($user) {
-			$token = $this->guard()->login($user);
-			return $this->respondWithToken($token);
-		} else {
-			$profile_picture = "default.png";
-			if ($userSocial->getAvatar() != "") {
-				$fileContents = file_get_contents($userSocial->getAvatar());
-				$profile_picture = time() . "_avatar.jpg";
-				$path = public_path() . '/uploads/profile/' . $profile_picture;
-				\File::put($path, $fileContents);
-			}
+    }
 
-			$user = new User();
-			$user->name = $userSocial->getName();
-			$user->email = $userSocial->getEmail();
-			$user->user_type = 'customer';
-			$user->status = 1;
-			$user->profile_picture = $profile_picture;
-			$user->email_verified_at = now();
-			$user->provider_id = $userSocial->getId();
-			$user->provider = $provider;
-			$user->save();
+    /**
+     * Log the user out (Invalidate the token)
+     *
+     * @return \Illuminate\Http\JsonResponse
+     */
+    public function logout()
+    {
+        $this->guard()->logout();
 
-			$token = $this->guard()->login($user);
-			return $this->respondWithToken($token);
-		}
-	}
+        return response()->json(['message' => 'Successfully logged out']);
+    }
 
-  	public function register_guest_user(Request $request){
-		$request->validate([
-			'name' => 'required|string|max:191',
-			'email' => 'required|string|email|max:191|unique:users',
-			'phone' => 'required',
-		], [
-			'name.required' => _lang('The name field is required.'),
-			'email.required' => _lang('The email field is required.'),
-			'email.unique' => _lang('Email address already exists.'),
-			'phone.required' => _lang('The phone field is required.'),
-		]);
+    /**
+     * Refresh a token.
+     *
+     * @return \Illuminate\Http\JsonResponse
+     */
+    public function refresh()
+    {
+        return $this->respondWithToken($this->guard()->refresh());
+    }
 
-		$user = new User();
-		$user->name = $request->name;
-		$user->email = $request->email;
-		$user->phone = $request->phone;
-		$user->email_verified_at = get_option('email_verification') != 'enabled' ? now() : NULL;
-		$user->user_type = 'customer';
-		$user->password = Hash::make($request->email);
-		$user->status = 1;
-		$user->save();
+    public function request_verification_link()
+    {
+        //Send Email Verification Message
+        Overrider::load("Settings");
+        $this->guard()->user()->sendEmailVerificationNotification();
+    }
 
-		$credentials = [
-			'email' => $request->email,
-			'password' => $request->email
-		];
-		$token = $this->guard()->attempt($credentials);
+    /**
+     * Social Login
+     *
+     * @return \Illuminate\Http\JsonResponse
+     */
+    public function social_login($provider)
+    {
+        Overrider::load("SocialSettings");
+        $userSocial = Socialite::driver($provider)->redirectUrl(url(''))->stateless()->user();
+        $user = User::where(['email' => $userSocial->getEmail()])->first();
 
-		return $this->respondWithToken($token);
-	}
-  
-	/**
-	 * Get the token array structure.
-	 *
-	 * @param  string $token
-	 *
-	 * @return \Illuminate\Http\JsonResponse
-	 */
-	protected function respondWithToken($token) {
-		return response()->json([
-			'result' => true,
-			'token' => $token,
-			'user' => new UserResource($this->guard()->user()),
-			'token_type' => 'Bearer',
-			'expires_in' => $this->guard()->factory()->getTTL() * 60,
-		]);
-	}
+        if ($user) {
+            $token = $this->guard()->login($user);
+            return $this->respondWithToken($token);
+        } else {
+            $profile_picture = "default.png";
+            if ($userSocial->getAvatar() != "") {
+                $fileContents = file_get_contents($userSocial->getAvatar());
+                $profile_picture = time() . "_avatar.jpg";
+                $path = public_path() . '/uploads/profile/' . $profile_picture;
+                \File::put($path, $fileContents);
+            }
 
-	/**
-	 * Get the guard to be used during authentication.
-	 *
-	 * @return \Illuminate\Contracts\Auth\Guard
-	 */
-	public function guard() {
-		return Auth::Guard('api');
-	}
+            $user = new User();
+            $user->name = $userSocial->getName();
+            $user->email = $userSocial->getEmail();
+            $user->user_type = 'customer';
+            $user->status = 1;
+            $user->profile_picture = $profile_picture;
+            $user->email_verified_at = now();
+            $user->provider_id = $userSocial->getId();
+            $user->provider = $provider;
+            $user->save();
+
+            $token = $this->guard()->login($user);
+            return $this->respondWithToken($token);
+        }
+    }
+
+    //// old
+    // public function register_guest_user(Request $request)
+    // {
+    //     $request->validate([
+    //         'name' => 'required|string|max:191',
+    //         'email' => 'required|string|email|max:191|unique:users',
+    //         'phone' => 'required',
+    //     ], [
+    //         'name.required' => _lang('The name field is required.'),
+    //         'email.required' => _lang('The email field is required.'),
+    //         'email.unique' => _lang('Email address already exists.'),
+    //         'phone.required' => _lang('The phone field is required.'),
+    //     ]);
+
+    //     $user = new User();
+    //     $user->name = $request->name;
+    //     $user->email = $request->email;
+    //     $user->phone = $request->phone;
+    //     $user->email_verified_at = get_option('email_verification') != 'enabled' ? now() : null;
+    //     $user->user_type = 'customer';
+    //     $user->password = Hash::make($request->email);
+    //     $user->status = 1;
+    //     $user->save();
+
+    //     $credentials = [
+    //         'email' => $request->email,
+    //         'password' => $request->email
+    //     ];
+    //     $token = $this->guard()->attempt($credentials);
+
+    //     return $this->respondWithToken($token);
+    // }
+
+
+
+    // public function register_guest_user(Request $request)
+    // {
+    //     $request->validate([
+    //         'name' => 'required|string|max:191',
+    //         'email' => 'required|string|email|max:191',
+    //         'phone' => 'required|unique:users',
+    //     ], [
+    //         'name.required' => _lang('The name field is required.'),
+    //         'phone.required' => _lang('The phone field is required.'),
+    //         'phone.unique' => _lang('Phone already exists.'),
+    //     ]);
+
+    //     $user = new User();
+    //     $user->name = $request->name;
+    //     $user->email = $request->email;
+    //     $user->phone = $request->phone;
+    //     $user->email_verified_at = get_option('email_verification') != 'enabled' ? now() : null;
+    //     $user->user_type = 'customer';
+    //     // $user->password = Hash::make($request->phone);
+    //     $user->password = Hash::make($request->email);
+    //     $user->status = 1;
+    //     $user->save();
+
+    //     $credentials = [
+    //         'phone' => $request->phone,
+    //         'password' => $request->email
+    //     ];
+    //     $token = $this->guard()->attempt($credentials);
+
+    //     return $this->respondWithToken($token);
+    // }
+
+    public function register_guest_user(Request $request)
+    {
+        // // Check if a user with the provided email or phone already exists
+        // $existingUser = User::where('email', $request->email)
+        //                     ->orWhere('phone', $request->phone)
+        //                     ->first();
+
+        // // If user exists, authenticate the user and return token
+        // if ($existingUser) {
+        //     $credentials = [
+        //         'phone' => $request->phone,
+        //         'password' => $request->email // Note: It's advisable to use a different password for phone-based login
+        //     ];
+
+        //     // Attempt login
+        //     if ($token = $this->guard()->attempt($credentials)) {
+        //         return $this->respondWithToken($token);
+        //     } else {
+        //         return response()->json(['error' => 'Unauthorized'], 401);
+        //     }
+        // }
+
+        // If user doesn't exist, proceed with registration
+        $request->validate([
+            'name' => 'required|string|max:191',
+            // 'email' => 'required|string|email|max:191',
+            'phone' => 'required',
+        ], [
+            'name.required' => _lang('The name field is required.'),
+            'phone.required' => _lang('The phone field is required.'),
+            // 'phone.unique' => _lang('Phone already exists.'),
+        ]);
+
+        $user = new User();
+        $user->name = $request->name;
+        // $user->email = $request->email;
+        $user->phone = $request->phone;
+        $user->email_verified_at = get_option('email_verification') != 'enabled' ? now() : null;
+        $user->user_type = 'customer';
+        $user->password = Hash::make($request->phone); // You might consider using a different password for phone-based login
+        $user->status = 1;
+        $user->save();
+
+        $credentials = [
+            'phone' => $request->phone,
+            'password' => $request->phone,
+        ];
+        // Generate token for the newly registered user
+        $token = $this->guard()->attempt($credentials);
+
+        return $this->respondWithToken($token);
+    }
+
+
+    /**
+     * Get the token array structure.
+     *
+     * @param  string $token
+     *
+     * @return \Illuminate\Http\JsonResponse
+     */
+    protected function respondWithToken($token)
+    {
+        return response()->json([
+            'result' => true,
+            'token' => $token,
+            'user' => new UserResource($this->guard()->user()),
+            'token_type' => 'Bearer',
+            'expires_in' => $this->guard()->factory()->getTTL() * 60,
+        ]);
+    }
+
+    /**
+     * Get the guard to be used during authentication.
+     *
+     * @return \Illuminate\Contracts\Auth\Guard
+     */
+    public function guard()
+    {
+        return Auth::Guard('api');
+    }
 }

@@ -1,6 +1,7 @@
 <template>
   <div>
     <!--Sticky Busket-->
+    
     <div id="sticky-busket" class="btn-busket d-md-block d-none">
       <div class="items text-center py-1">
         <i class="icofont-shopping-cart"></i>
@@ -15,9 +16,17 @@
     <!-- Start Cart Panel -->
     <div class="shopping_cart" id="side_shopping_cart">
       <div class="shp_cart_header">
-        <h4>
+        <div style="text-align: right;
+        padding: 13px;
+        margin-left: 20px;">
+          عربة التسوق
+          
+        </div>
+
+        <!-- <h4>
           <i class="icofont-cart"></i> {{ totalItems }} {{ $lang["ITEMS"] }}
-        </h4>
+        </h4> -->
+        
         <div class="offsetmenu_close_btn">
           <a href="#"><i class="icofont-close-squared-alt"></i></a>
         </div>
@@ -36,7 +45,7 @@
           <div v-if="totalItems == 0" class="text-center">
             <img src="/theme/img/empty-cart.png" />
             <p class="text-center pt-2 pb-5">
-              <b>{{ $lang["Your shopping bag is empty !"] }}</b>
+              <b> حقيبة التسوق الخاصة بك فارغة ! </b>
             </p>
           </div>
 
@@ -44,6 +53,7 @@
             v-for="cartItem in cartItems"
             class="shp_single_product"
             :key="cartItem.id"
+            style="direction: rtl; text-align: right; margin-bottom: 50px"
           >
             <div class="shp_pro_thumb">
               <img :src="cartItem.product.thumbnail" alt="product images" />
@@ -89,26 +99,32 @@
             </div>
           </div>
         </div>
-        <table class="table summary-table">
+        <table
+          class="table summary-table"
+          style="direction: rtl; text-align: right"
+        >
           <tr>
-            <td>{{ $lang["Subtotal"] }}:</td>
-            <td class="float-right">{{ $currency + " " + subTotal }}</td>
+            <td>المجموع الفرعي:</td>
+            <td >{{ $currency + " " + subTotal }}</td>
           </tr>
           <tr>
-            <td>{{ $lang["Delivery Charge"] }}:</td>
-            <td class="float-right">
+            <td>رسوم التوصيل:</td>
+            <td >
               + {{ $currency + " " + deliveryCharge }}
             </td>
           </tr>
           <tr v-if="couponData">
             <td>{{ $lang["Discount"] }}({{ couponData.name }}):</td>
-            <td class="float-right">- {{ $currency + " " + discount }}</td>
+            <td >- {{ $currency + " " + discount }}</td>
           </tr>
           <tr>
             <td>
-              <b>{{ $lang["Grand Total"] }}:</b>
+              <b>
+                <!-- {{ $lang["Grand Total"] }}: -->
+                المجموع الإجمالي:
+              </b>
             </td>
-            <td class="float-right">
+            <td >
               <b>{{ $currency + " " + grandTotal }}</b>
             </td>
           </tr>
@@ -125,7 +141,8 @@
                 aria-expanded="true"
                 aria-controls="have_coupon_code"
               >
-                {{ $lang["Have Coupon Code ?"] }}
+                <!-- {{ $lang["Have Coupon Code ?"] }} -->
+                هل لديك كوبون كود ؟
               </button>
             </h2>
           </div>
@@ -152,8 +169,10 @@
             <router-link
               :to="{ name: 'checkout', params: { slug: 'address' } }"
               v-on:click.native="closeShoppingCart"
-              >{{ $lang["Place Order"] }}</router-link
             >
+              <!-- {{ $lang["Place Order"] }} -->
+              اطلب الأن
+            </router-link>
           </li>
         </ul>
       </div>
@@ -163,7 +182,7 @@
     <!--Bottom Navigation-->
     <div id="bottom-navigation">
       <ul class="d-flex align-items-center">
-        <li>
+        <!-- <li>
           <router-link :to="{ name: 'profile' }"
             ><i class="icofont-ui-user"></i
           ></router-link>
@@ -176,7 +195,7 @@
             ><i class="icofont-check-circled"></i>
             {{ $lang["Place Order"] }}</router-link
           >
-        </li>
+        </li> -->
         <li>
           <a href="#" class="btn-busket"
             ><i class="icofont-cart-alt"></i
@@ -185,7 +204,6 @@
         </li>
       </ul>
     </div>
-    <!--End Bottom Navigation-->
   </div>
 </template>
 
@@ -280,36 +298,3 @@ export default {
   },
 };
 </script>
-
-<style scoped>
-#sticky-busket {
-  position: fixed;
-  left: 20px; /* Adjust as needed */
-  top: 50%; /* Adjust as needed */
-  transform: translateY(-50%);
-  background-color: #ffffff;
-  border: 1px solid #dddddd;
-  padding: 10px;
-  border-radius: 5px;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-}
-
-.btn-busket {
-  cursor: pointer;
-}
-
-.items,
-.price {
-  display: inline-block;
-  vertical-align: middle;
-}
-
-.items {
-  margin-right: 10px;
-}
-
-.icofont-shopping-cart {
-  font-size: 24px;
-  margin-right: 5px;
-}
-</style>

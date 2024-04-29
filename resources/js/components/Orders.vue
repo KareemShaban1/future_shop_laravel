@@ -1,18 +1,18 @@
 <template>
-  <div class="card">
+  <div class="card" style="direction: rtl; text-align: right">
     <div class="card-header">
-      <h4 class="header-title">{{ $lang["My Orders"] }}</h4>
+      <h4 class="header-title text-center">طلباتى</h4>
     </div>
     <div class="card-body">
       <div class="table-responsive">
         <table class="table table-bordered">
           <thead>
-            <th>{{ $lang["ID"] }}</th>
-            <th>{{ $lang["Date"] }}</th>
-            <th>{{ $lang["Amount"] }}</th>
-            <th>{{ $lang["Payment"] }}</th>
-            <th>{{ $lang["Delivery"] }}</th>
-            <th class="text-center">{{ $lang["Details"] }}</th>
+            <th>ID</th>
+            <th>التاريخ</th>
+            <th>الكمية</th>
+            <th>الدفع</th>
+            <th>التوصيل</th>
+            <th class="text-center">التفاصيل</th>
           </thead>
           <tbody>
             <tr v-if="!loading && orders.length == 0">
@@ -34,7 +34,7 @@
                   }"
                   class="btn btn-primary px-4 py-2"
                 >
-                  {{ $lang["View"] }}
+                  عرض
                 </router-link>
               </td>
             </tr>

@@ -8,7 +8,10 @@
         <div class="container">
           <div class="row text-center">
             <div class="col-lg-8 offset-lg-2">
-              <h2>{{ $lang["Special Offers"] }}</h2>
+              <h2>
+                <!-- {{ $lang["Special Offers"] }} -->
+                عروض خاصة
+              </h2>
             </div>
           </div>
         </div>
@@ -17,7 +20,10 @@
 
     <section class="popular-items section">
       <div class="container-fluid">
-        <h3 class="section-heading">{{ $lang["Special Offers"] }}</h3>
+        <h3 class="section-heading">
+          <!-- {{ $lang["Special Offers"] }} -->
+          عروض خاصة
+        </h3>
 
         <ProductSkelton v-if="loading && load_more" />
 
@@ -47,21 +53,22 @@ export default {
   methods: {
     ...mapActions("offers", ["fetchProducts"]),
     infiniteHandler() {
-      window.onscroll = () => {
-        let _this = this;
-        let bottomOfWindow =
-          document.documentElement.scrollTop + window.innerHeight >
-          document.documentElement.offsetHeight -
-            document.getElementById("footer").offsetHeight;
-        if (bottomOfWindow && this.load_more && this.init == true) {
-          this.load_more = false;
-          this.fetchProducts().then(function () {
-            if (_this.init == true) {
-              _this.load_more = true;
-            }
-          });
-        }
-      };
+    
+      // window.onscroll = () => {
+      //   let _this = this;
+      //   let bottomOfWindow =
+      //     document.documentElement.scrollTop + window.innerHeight >
+      //     document.documentElement.offsetHeight -
+      //       document.getElementById("footer").offsetHeight;
+      //   if (bottomOfWindow && this.load_more && this.init == true) {
+      //     this.load_more = false;
+      //     this.fetchProducts().then(function () {
+      //       if (_this.init == true) {
+      //         _this.load_more = true;
+      //       }
+      //     });
+      //   }
+      // };
     },
   },
   created() {

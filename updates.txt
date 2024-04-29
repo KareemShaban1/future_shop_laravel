@@ -1,0 +1,11 @@
+1- resources/js/App.vue
+2- resources/js/components/Sidebar.vue
+3- public/theme/css/style.css
+4- resources/js/pages/Home.vue
+5- resources/js/pages/Checkout.vue
+6- resources/js/components/checkout/Address.vue
+7- resources/js/components/checkout/Confirm.vue
+8- resources/js/components/auth/Login.vue
+9- config/auth.php
+10- app/Http/Controllers/API/AuthController.php
+11- resources/js/components/Products.vue

@@ -5,11 +5,13 @@
         <div class="card card-signin my-5">
           <div class="card-body">
             <h5 class="card-title text-center pt-2 pb-3">
-              {{ $lang["Create an Account"] }}
+              <!-- {{ $lang["Create an Account"] }} -->
+              أنشاء حساب
             </h5>
             <form class="form-signup" @submit.prevent="register">
               <div class="form-label-group mb-3">
                 <input
+                  style="text-align: right"
                   type="text"
                   id="name"
                   v-bind:class="
@@ -18,7 +20,7 @@
                       : 'form-control'
                   "
                   v-model="name"
-                  :placeholder="$lang['Name']"
+                  placeholder="الأسم"
                 />
                 <span class="text-danger" v-if="errors && errors.name">
                   {{ errors.name[0] }}
@@ -27,6 +29,7 @@
 
               <div class="form-label-group mb-3">
                 <input
+                  style="text-align: right"
                   type="email"
                   id="email"
                   v-bind:class="
@@ -35,7 +38,7 @@
                       : 'form-control'
                   "
                   v-model="email"
-                  :placeholder="$lang['Email address']"
+                  placeholder="البريد الألكترونى"
                 />
                 <span class="text-danger" v-if="errors && errors.email">
                   {{ errors.email[0] }}
@@ -44,6 +47,7 @@
 
               <div class="form-label-group mb-3">
                 <input
+                  style="text-align: right"
                   type="text"
                   id="phone"
                   v-bind:class="
@@ -52,7 +56,7 @@
                       : 'form-control'
                   "
                   v-model="phone"
-                  :placeholder="$lang['Mobile']"
+                  placeholder="رقم الهاتف"
                 />
                 <span class="text-danger" v-if="errors && errors.phone">
                   {{ errors.phone[0] }}
@@ -61,6 +65,7 @@
 
               <div class="form-label-group mb-3">
                 <input
+                  style="text-align: right"
                   type="password"
                   id="password"
                   v-bind:class="
@@ -69,7 +74,7 @@
                       : 'form-control'
                   "
                   v-model="password"
-                  :placeholder="$lang['Password']"
+                  placeholder="كلمة المرور"
                 />
                 <span class="text-danger" v-if="errors && errors.password">
                   {{ errors.password[0] }}
@@ -78,41 +83,32 @@
 
               <div class="form-label-group mb-3">
                 <input
+                  style="text-align: right"
                   type="password"
                   id="password_confirmation"
                   class="form-control"
                   v-model="password_confirmation"
-                  :placeholder="$lang['Confirm Password']"
+                  placeholder="تأكيد كلمة المرور"
                 />
               </div>
 
               <button
                 type="submit"
-                class="
-                  btn btn-lg btn-primary btn-block btn-login
-                  text-uppercase
-                  py-3
-                  mt-2
-                "
+                class="btn btn-lg btn-primary btn-block btn-login text-uppercase py-3 mt-2"
               >
                 <span
                   v-if="loading"
                   class="spinner-border spinner-border-sm"
                 ></span>
-                <span v-if="!loading">{{ $lang["Sign Up"] }}</span>
+                <span v-if="!loading"> أنشاء حساب </span>
               </button>
               <router-link
                 :to="{ name: 'login' }"
-                class="
-                  btn btn-lg btn-light
-                  text-dark
-                  btn-block
-                  text-uppercase
-                  py-3
-                  mb-1
-                "
-                >{{ $lang["Already have an account?"] }}</router-link
+                style="border: solid 1px black"
+                class="btn btn-lg btn-light text-dark btn-block text-uppercase py-3 mb-1"
               >
+                لديك حساب بالفعل ؟
+              </router-link>
             </form>
           </div>
         </div>

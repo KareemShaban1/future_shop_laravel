@@ -4,7 +4,14 @@
       <div class="main-menu-area">
         <div class="container-fluid">
           <div class="d-flex align-items-center">
-            <div class="left-header">
+            <div
+              class="left-header"
+              style="
+                align-items: center;
+                display: flex;
+                justify-content: flex-start;
+              "
+            >
               <span id="sidebarToggle">
                 <div class="lines">
                   <span></span>
@@ -15,7 +22,7 @@
               </span>
               <a href="">
                 <img
-                  src="/theme/img/website-logo.png"
+                  src="/theme/img/website-logo-1.jpeg"
                   class="logo d-none d-md-inline-block"
                 />
               </a>
@@ -30,38 +37,43 @@
                   @keyup="searchProduct($event)"
                   :value="keyword"
                   autocomplete="off"
-                  placeholder="Search Products"
+                  placeholder="أبحث هنا"
+                  style="
+                    direction: rtl;
+                    background: #e5e5e5;
+                    border-radius: 20px;
+                  "
                 />
-                <button type="button" class="search-btn d-none d-md-block">
+                <span style="position: absolute; right: 10px; top: 10px">
                   <i class="icofont-search"></i>
-                </button>
+                </span>
               </div>
             </div>
 
             <div class="right-header ml-lg-2">
               <div class="menu-extra float-right d-none d-lg-inline-block">
                 <ul>
-                  <li v-if="isLoggedIn">
+                  <!-- <li v-if="isLoggedIn">
                     <router-link :to="{ name: 'profile' }"
-                      ><i class="icofont-ui-user"></i>
-                      {{ $lang["Account"] }}</router-link
-                    >
-                  </li>
+                      ><i class="icofont-ui-user" style="color: black"></i>
+                      حسابى
+                    </router-link>
+                  </li> -->
 
                   <li v-if="isLoggedIn">
-                    <a href="#" @click="logout" class="btn-signin"
-                      ><i class="icofont-exit"></i> {{ $lang["Logout"] }}</a
-                    >
+                    <a href="#" @click="logout" class="btn-signin">
+                      تسجيل خروج
+                    </a>
                   </li>
 
-                  <li v-if="!isLoggedIn">
+                  <!-- <li v-if="!isLoggedIn">
                     <router-link
                       :to="{ name: 'register' }"
                       exact
                       class="btn-signup"
-                      ><i class="icofont-user-alt-7"></i>
-                      {{ $lang["Sign Up"] }}</router-link
                     >
+                      أنشاء حساب
+                    </router-link>
                   </li>
 
                   <li v-if="!isLoggedIn">
@@ -69,17 +81,17 @@
                       :to="{ name: 'login' }"
                       exact
                       class="btn-signin"
-                      ><i class="icofont-sign-in"></i>
-                      {{ $lang["Sign In"] }}</router-link
                     >
-                  </li>
+                      تسجيل دخول
+                    </router-link>
+                  </li> -->
                 </ul>
               </div>
-              <router-link
+              <!-- <router-link
                 class="btn btn-action btn-sm d-lg-none ml-2"
                 :to="{ name: 'profile' }"
                 ><i class="icofont-ui-user"></i
-              ></router-link>
+              ></router-link> -->
             </div>
           </div>
         </div>
@@ -95,7 +107,7 @@
         <div class="main-content">
           <router-view></router-view>
         </div>
-        <Footer></Footer>
+        <!-- <Footer></Footer> -->
       </div>
     </div>
   </div>
@@ -131,7 +143,8 @@ export default {
   methods: {
     logout: function () {
       this.$store.dispatch("auth/logout").then(() => {
-        this.$router.push("/login");
+        // this.$router.push("/login");
+        window.location.href = "/login";
       });
     },
     searchProduct: function ($event) {

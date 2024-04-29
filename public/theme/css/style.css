@@ -6,10 +6,21 @@
   Version: 1.0
 */
 
+@font-face {
+  font-family: "XBRiyaz";
+  src: url(../fonts/Almarai-Regular.ttf);
+  src: url(../fonts/Almarai-Bold.ttf);
+  src: url(../fonts/Almarai-Regular.ttf);
+  src: url(../fonts/Almarai-Regular.ttf);
+  
+  }
+
 /* 1. Theme default css */
 @import url("https://fonts.googleapis.com/css?family=Poppins:300,400,500,600,700");
 body {
-  font-family: "Poppins", sans-serif;
+  /* font-family: "Poppins", sans-serif; */
+  font-family: "XBRiyaz";
+
   font-weight: normal;
   font-style: normal;
   background: #fafafa;
@@ -290,7 +301,7 @@ label {
 #sidebarToggle .lines span {
   height: 2px;
   width: 100%;
-  background-color: rgba(255, 255, 255, 0.8);
+  background-color: var(--primary-color);
   display: block;
   margin-bottom: 5px;
   -webkit-transition: -webkit-transform 0.5s ease;
@@ -343,7 +354,7 @@ label {
   position: relative;
 }
 #bottom-navigation li:nth-child(2) {
-  background: #ee5186;
+  background: #e90031;
 }
 #bottom-navigation li i {
   font-size: 20px;
@@ -573,7 +584,8 @@ input:checked + .slider:before {
 /* 2. Header Css */
 .main-menu-area {
   padding: 13px 0px;
-  background: var(--primary-color);
+  /* background: var(--primary-color); */
+  background: white;
   position: fixed;
   z-index: 99;
   width: 100%;
@@ -616,8 +628,23 @@ input:checked + .slider:before {
   padding: 5px 20px;
 }
 .menu-extra ul li a.btn-signin {
-  color: #fff;
-  background: #eb4d4b;
+  display:block;
+  height:40px;
+  color: var(--primary-color);
+  /* background: #eb4d4b; */
+  border: solid  1px var(--primary-color);
+  background: white;
+  border-radius: 20px;
+  padding: 5px 20px;
+  transition: all 0.3s;
+}
+
+.menu-extra ul li a.btn-signup {
+  display:block;
+  height:40px;
+  color: white;
+  background: var(--primary-color);
+  border: solid  1px var(--primary-color);
   border-radius: 20px;
   padding: 5px 20px;
   transition: all 0.3s;
@@ -647,7 +674,7 @@ input:checked + .slider:before {
 
 .home-search > input {
   background: #fff;
-  padding: 10px 20px;
+  padding: 10px 35px;
   border: none;
   width: 100%;
   font-weight: 300;
@@ -661,7 +688,7 @@ input:checked + .slider:before {
   border: none;
   padding: 8px 25px;
   position: absolute;
-  right: 2px;
+  left: 2px;
   top: 2px;
   border-radius: 2px;
   cursor: pointer;
@@ -878,9 +905,11 @@ input:checked + .slider:before {
   border-radius: 4px;
   margin-bottom: 30px;
   padding: 5px;
+  min-height: 460px;
 }
 
 .popular-items .single-item img {
+  min-height:260px;
   max-height: 260px;
   border-radius: 4px;
   width: 100%;
@@ -1070,18 +1099,19 @@ input:checked + .slider:before {
 .shopping_cart.shopping_cart_on {
   opacity: 1;
   padding-bottom: 15px;
-  left: calc(0px - 16px);
+  left: calc(0px - 0px);
 }
 
 .shopping_cart_inner {
+  background:white;
   min-height: 100%;
-  padding: 0px 20px 20px 20px;
+  padding: 0px 10px 20px 20px;
 }
 .offsetmenu_close_btn {
   background-color: var(--primary-color);
   padding: 13px 20px;
   position: absolute;
-  right: 0;
+  left: 15px;
   top: 0;
   z-index: 10;
 }
@@ -1164,7 +1194,7 @@ input:checked + .slider:before {
 
 .shp_cart_header {
   height: 60px;
-  background: #e5e2e2;
+  background: white;
 }
 
 .shp_cart_header h4 {
@@ -1379,7 +1409,7 @@ input:checked + .slider:before {
   min-width: 75px;
   height: auto;
   position: fixed;
-  /* right: 0; */
+  left: 0;
   top: 40%;
   background: #fff;
   box-shadow: 1px 3px 15px #c4c4c4;
@@ -1472,8 +1502,9 @@ input:checked + .slider:before {
 .profile-pills .nav-item a {
   color: #000;
   padding: 10px 18px;
-  border: 1px solid #000;
-  margin: 1px;
+  border-bottom: 1px solid #000;
+  margin: 0px 10px;
+  border-radius:0px;
 }
 
 .profile-pills .nav-item a.active {

@@ -2,31 +2,46 @@
   <div class="container">
     <div class="row">
       <div class="col-lg-6 mx-auto my-5">
-        <div class="card">
+        <div class="card" style="direction:rtl; text-align: right;">
           <div class="card-header">
-            <h4 class="text-center">{{ $lang["Order Summary"] }}</h4>
+            <h4 class="text-center">
+              <!-- {{ $lang["Order Summary"] }} -->
+              ملخص الطلب
+            </h4>
           </div>
           <div class="card-body">
             <table v-if="order" class="table">
               <tbody>
                 <tr>
-                  <td>{{ $lang["Order ID"] }}</td>
+                  <td>
+                    <!-- {{ $lang["Order ID"] }} -->
+                    رقم الطلب
+                  </td>
                   <td class="text-right">{{ order.order_id }}</td>
                 </tr>
                 <tr>
-                  <td>{{ $lang["Payment Status"] }}</td>
+                  <td>
+                    <!-- {{ $lang["Payment Status"] }} -->
+                    حالة السداد
+                  </td>
                   <td class="text-right">
                     <span v-html="paymentStatus"></span>
                   </td>
                 </tr>
                 <tr>
-                  <td>{{ $lang["Delivery Status"] }}</td>
+                  <td>
+                    <!-- {{ $lang["Delivery Status"] }} -->
+                    حالة التسليم
+                  </td>
                   <td class="text-right">
                     <span v-html="deliveryStatus"></span>
                   </td>
                 </tr>
                 <tr>
-                  <td>{{ $lang["Payment Method"] }}</td>
+                  <td>
+                    <!-- {{ $lang["Payment Method"] }} -->
+                    طريقة الدفع او السداد
+                  </td>
                   <td class="text-right">
                     {{
                       order.payment_method.replaceAll("_", " ").toUpperCase()
@@ -34,25 +49,37 @@
                   </td>
                 </tr>
                 <tr>
-                  <td>{{ $lang["Sub Total"] }}</td>
+                  <td>
+                    <!-- {{ $lang["Sub Total"] }} -->
+                    المجموع الفرعي
+                  </td>
                   <td class="text-right">
                     {{ $currency + " " + order.sub_total }}
                   </td>
                 </tr>
                 <tr>
-                  <td>{{ $lang["Delivery Charge"] }}</td>
+                  <td>
+                    <!-- {{ $lang["Delivery Charge"] }} -->
+                    رسوم التوصيل
+                  </td>
                   <td class="text-right">
                     + {{ $currency + " " + order.shipping_cost }}
                   </td>
                 </tr>
                 <tr>
-                  <td>{{ $lang["Discount"] }}</td>
+                  <td>
+                    <!-- {{ $lang["Discount"] }} -->
+                    الخصم
+                  </td>
                   <td class="text-right">
                     - {{ $currency + " " + order.discount }}
                   </td>
                 </tr>
                 <tr>
-                  <td>{{ $lang["Grand Total"] }}</td>
+                  <td>
+                    <!-- {{ $lang["Grand Total"] }} -->
+                    المجموع الإجمالي
+                  </td>
                   <td class="text-right">
                     <b>{{ $currency + " " + order.grand_total }}</b>
                   </td>

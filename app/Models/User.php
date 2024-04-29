@@ -70,8 +70,8 @@ class User extends Authenticatable implements JWTSubject
     }
 
     // Set the phone attribute as the identifier for authentication
-    public function getAuthIdentifierName()
-    {
-        return 'phone';
-    }
+    // public function getAuthIdentifierName()
+    // {
+    //     return 'phone';
+    // }
 }

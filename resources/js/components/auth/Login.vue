@@ -4,28 +4,28 @@
       <div class="col-sm-9 col-md-7 col-lg-5 mx-auto">
         <div class="card card-signin my-5">
           <div class="card-body">
-            <h5 class="card-title text-center pt-2 pb-3">
-              {{ $lang["Login to your account"] }}
-            </h5>
+            <h5 class="card-title text-center pt-2 pb-3">تسجيل الدخول</h5>
             <form class="form-signin" @submit.prevent="login">
               <div class="form-label-group mb-3">
                 <input
-                  type="email"
-                  id="email"
+                  style="text-align: right"
+                  type="text"
+                  id="phone"
                   class="form-control"
-                  v-model="email"
-                  :placeholder="$lang['Email address']"
+                  v-model="phone"
+                  placeholder="رقم الهاتف"
                   required
                 />
               </div>
 
               <div class="form-label-group mb-3">
                 <input
+                  style="text-align: right"
                   type="password"
                   id="password"
                   class="form-control"
                   v-model="password"
-                  :placeholder="$lang['Password']"
+                  placeholder="كلمة المرور"
                   required
                 />
               </div>
@@ -38,7 +38,7 @@
                   v-if="loading"
                   class="spinner-border spinner-border-sm"
                 ></span>
-                <span v-if="!loading">{{ $lang["Sign in"] }}</span>
+                <span v-if="!loading"> تسجيل الدخول </span>
               </button>
 
               <button
@@ -61,9 +61,12 @@
 
               <router-link
                 :to="{ name: 'register' }"
-                class="btn btn-lg btn-light text-dark btn-block text-uppercase py-3 mb-1"
-                >{{ $lang["Create an Account"] }}</router-link
+                style="border: solid 1px black"
+                class="btn btn-lg text-dark btn-block text-uppercase py-3 mb-1"
               >
+                <!-- {{ $lang["Create an Account"] }} -->
+                أنشاء حساب
+              </router-link>
             </form>
           </div>
         </div>
@@ -78,7 +81,7 @@ import { mapGetters } from "vuex";
 export default {
   data() {
     return {
-      email: "",
+      phone: "",
       password: "",
     };
   },
@@ -103,10 +106,10 @@ export default {
   },
   methods: {
     login: function () {
-      let email = this.email;
+      let phone = this.phone;
       let password = this.password;
       this.$store
-        .dispatch("auth/login", { email, password })
+        .dispatch("auth/login", { phone, password })
         .then(() => {
           if (this.requestPage == null) {
             this.$router.push("/");
