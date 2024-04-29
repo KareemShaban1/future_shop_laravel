@@ -225,7 +225,7 @@ export default {
       let data = {
         name: this.user.name,
         phone: this.user.phone,
-        email: this.user.phone,
+        // email: this.user.phone,
         // email: this.user.email,
         // email: this.$store.getters["auth/isLoggedIn"]
         //   ? this.user.email
